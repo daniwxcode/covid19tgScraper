@@ -44,7 +44,7 @@ namespace covid19tg_scraper.Controllers
                 Stats itemStats = new Stats();
                 itemStats.ActiveCases = itemHtmlDetails[2].InnerHtml.GetInt();
                 itemStats.Cured = itemHtmlDetails[3].InnerHtml.GetInt();
-                itemStats.Deaths = itemHtmlDetails[4].InnerHtml.GetInt();
+                itemStats.Deaths = itemHtmlDetails[5].InnerHtml.GetInt();
                 itemDetails.Stat = itemStats;
                 foreach (var history in itemsections[1].QuerySelectorAll("p"))
                 {
