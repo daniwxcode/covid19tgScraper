@@ -37,11 +37,29 @@ namespace covid19tg_scraper.Controllers
             stat.ActiveCases = document.ReadInteger("#active-cases>div>h2");
             stat.Cured = document.ReadInteger("#cured>div>h2");
             stat.Deaths = document.ReadInteger("#deceased>div>h2");
-
+            stat.timeInfo = StripTagsRegexCompiled(document.QuerySelector("#timeinfo").InnerHtml);
+           // stat.timeInfo=Regex.Replace( @"\W+", "");
+            stat.timeInfo= Regex.Replace(stat.timeInfo, "[^0-9A-Za-z à ,:]", "");
             return stat;
         }
-       
 
+        public static string StripTagsRegex(string source)
+        {
+            return Regex.Replace(source, "<.*?>", string.Empty);
+        }
+
+        /// <summary>
+        /// Compiled regular expression for performance.
+        /// </summary>
+        static Regex _htmlRegex = new Regex("<.*?>", RegexOptions.Compiled);
+
+        /// <summary>
+        /// Remove HTML from string with compiled Regex.
+        /// </summary>
+        public static string StripTagsRegexCompiled(string source)
+        {
+            return _htmlRegex.Replace(source, string.Empty);
+        }
 
 
 
