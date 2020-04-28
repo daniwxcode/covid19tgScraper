@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp;
 using covid19tg_scraper.Models;
@@ -46,10 +47,10 @@ namespace covid19tg_scraper.Controllers
                 itemStats.Cured = itemHtmlDetails[4].InnerHtml.GetInt();
                 itemStats.Deaths = itemHtmlDetails[5].InnerHtml.GetInt();
                 itemDetails.Stat = itemStats;
-                foreach (var history in itemsections[1].QuerySelectorAll("p"))
-                {
-                    itemDetails.Histoire += $"\n{history.InnerHtml}";
-                }
+  
+               itemDetails.Histoire= Regex.Replace(itemsections[1].TextContent, @"^[\s\t\n]+|[\s\t\n]+$", "");
+               itemDetails.Histoire = Regex.Replace(itemDetails.Histoire, @"<[^>]+>|&nbsp;", "").Trim();
+           
                 details.Add(itemDetails);
 
             }
