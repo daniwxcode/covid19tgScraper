@@ -26,6 +26,7 @@ namespace covid19tg_scraper
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddSwaggerGen(c=>c.SwaggerDoc("V1",new Microsoft.OpenApi.Models.OpenApiInfo{Title="API Docs",Version="V1" }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,7 +42,12 @@ namespace covid19tg_scraper
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseSwagger();
+            app.UseSwaggerUI(c=>{
+                c.SwaggerEndpoint("swagger.json","API V1");
+                c.RoutePrefix=string.Empty;
 
+                });
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

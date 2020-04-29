@@ -49,9 +49,13 @@ namespace covid19tg_scraper.Controllers
                 itemStats.Deaths = itemHtmlDetails[5].InnerHtml.GetInt();
                 itemDetails.Stat = itemStats;
 
-                itemDetails.Histoire = Regex.Replace(itemsections[1].TextContent, @"^[\s\t\n]+|[\s\t\n]+$", "");
-                itemDetails.Histoire = Regex.Replace(itemDetails.Histoire, @"<[^>]+>|&nbsp;", "").Trim();
-                itemDetails.Histoire = Regex.Replace(itemDetails.Histoire, @"\s{2,}", " "); ;
+            //    itemDetails.Histoire = Regex.Replace(itemsections[1].TextContent, @"^[\s\t\n]+|[\s\t\n]+$", "\n");
+                itemDetails.Histoire = Regex.Replace(itemsections[1].TextContent, @"<[^>]+>|&nbsp;", " ").Trim();
+                itemDetails.Histoire = Regex.Replace(itemsections[1].TextContent, @"U", "  U").Trim();
+
+                itemDetails.Histoire = Regex.Replace(itemDetails.Histoire, @"\s{2,}", " ");
+                itemDetails.Histoire = Regex.Replace(itemDetails.Histoire, @"\n{2,}", "\n");
+                itemDetails.Histoire = Regex.Replace(itemDetails.Histoire, @"\t{3,}", "\t\t"); ;
                 details.Add(itemDetails);
 
             }

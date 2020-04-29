@@ -8,6 +8,7 @@
   <ItemGroup>
     <PackageReference Include="AngleSharp" Version="0.14.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.4.0" />
     <PackageReference Include="TgCovidStats" Version="1.0.2" />
   </ItemGroup>
 
