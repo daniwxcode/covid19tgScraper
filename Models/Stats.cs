@@ -12,7 +12,7 @@ namespace covid19tg_scraper.Models
         public uint Deaths { get; set; }
         public uint Total { get { return ActiveCases + Cured + Deaths; } }
 
-        public string timeInfo { get;  set; }
+        public string TimeInfo { get;  set; }
 
         public override string ToString()
         {
