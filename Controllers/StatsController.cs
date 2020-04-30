@@ -17,24 +17,23 @@ namespace covid19tg_scraper.Controllers
     [Produces("application/json")]
     [Route("[controller]")]
     [ApiController]
-    public class DetailsController : ControllerBase
+    public class StatsController : ControllerBase
     {
         private readonly ILogger<DetailsController> _logger;
         // Constructor
-        public DetailsController(ILogger<DetailsController> logger)
+        public StatsController(ILogger<DetailsController> logger)
         {
             _logger = logger;
         }
 
         [HttpGet]
-        public async  Task<List<Details>> GetDetailsAsync()
+        public async  Task<Stats> GetStatsAsync()
         {
-            if (InfosCovidProvider.Details == null)
+            if (InfosCovidProvider.Stats == null)
             {
-                InfosCovidProvider.Details = await InfosCovidProvider.GetDetailsAsync();
-               
+                InfosCovidProvider.Stats =new Stats( await InfosCovidProvider.GetStatAsync());               
             }
-            return InfosCovidProvider.Details;
+            return InfosCovidProvider.Stats;
 
         }
 
