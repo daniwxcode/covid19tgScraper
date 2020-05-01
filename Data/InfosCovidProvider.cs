@@ -28,10 +28,11 @@ namespace covid19tg_scraper.Data
             AutoRefreshTimer = new Timer(async (e) =>
             {
                 var newData = await GetDetailsAsync();
+                if (Details == null) Details = newData;
                 newData.Reverse();
                 foreach (var tmp in newData)
                 {
-                    if (Details == null) Details = newData;
+                 
                     if (Details.All(p => p.Stat.TimeInfo != tmp.Stat.TimeInfo))
                     {
                         Details.Insert(0, tmp);
