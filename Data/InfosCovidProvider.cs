@@ -40,7 +40,16 @@ namespace covid19tg_scraper.Data
 
                 }
                 var tmpStats = new Stats(await GetStatAsync());
-                if (Stats.TimeInfo == tmpStats.TimeInfo)
+                if (Stats == null)
+                {
+                    var client = new RestClient("https://tgcovidinfo.firebaseio.com/Stats.json");
+                    client.Timeout = -1;
+                    var request = new RestRequest(Method.PATCH);
+                    request.AddHeader("Content-Type", "application/json");
+                    request.AddParameter("application/json", JsonConvert.SerializeObject(Stats), ParameterType.RequestBody);
+                    await client.ExecuteAsync(request);
+                }else 
+                if (Stats.TimeInfo != tmpStats.TimeInfo)
                 {
                     var client = new RestClient("https://tgcovidinfo.firebaseio.com/Stats.json");
                     client.Timeout = -1;
