@@ -9,18 +9,19 @@ using AngleSharp;
 using covid19tg_scraper.Models;
 using covid19tg_scraper.Services;
 using Newtonsoft.Json;
+using RestSharp;
 
 namespace covid19tg_scraper.Data
 {
     public static class InfosCovidProvider
     {
-        public static bool IsUpdate{get;set;}
+        public static bool IsUpdate { get; set; }
         public static List<Details> Details { get; set; }
         public static Timer AutoRefreshTimer { get; set; }
         public static Stats Stats { get; set; }
-        public static void AutoRefresh()
+        public static async void AutoRefresh()
         {
-            IsUpdate =false;
+            IsUpdate = false;
             var startTimeSpan = TimeSpan.Zero;
             var periodTimeSpan = TimeSpan.FromMinutes(10);
 
@@ -30,23 +31,42 @@ namespace covid19tg_scraper.Data
                 newData.Reverse();
                 foreach (var tmp in newData)
                 {
-                    if(Details ==null) Details = newData;
+                    if (Details == null) Details = newData;
                     if (Details.All(p => p.Stat.TimeInfo != tmp.Stat.TimeInfo))
                     {
-                        Details.Insert(0, tmp);         
-                        IsUpdate =true;
+                        Details.Insert(0, tmp);
+                        IsUpdate = true;
                     }
 
                 }
-                 Stats = new Stats(await GetStatAsync());
- 
-             
-      
+                var tmpStats = new Stats(await GetStatAsync());
+                if (Stats.TimeInfo == tmpStats.TimeInfo)
+                {
+                    var client = new RestClient("https://tgcovidinfo.firebaseio.com/Stats.json");
+                    client.Timeout = -1;
+                    var request = new RestRequest(Method.PATCH);
+                    request.AddHeader("Content-Type", "application/json");
+                    request.AddParameter("application/json", JsonConvert.SerializeObject(Stats), ParameterType.RequestBody);
+                    await client.ExecuteAsync(request);
+                }
+
+                if (IsUpdate)
+                {
+                    var client = new RestClient("https://tgcovidinfo.firebaseio.com/Stats.json");
+                    client.Timeout = -1;
+                    var request = new RestRequest(Method.PATCH);
+                    request.AddHeader("Content-Type", "application/json");
+                    request.AddParameter("application/json", JsonConvert.SerializeObject(Details), ParameterType.RequestBody);
+                    await client.ExecuteAsync(request);
+                }
+
+
+
             }, null, startTimeSpan, periodTimeSpan);
 
         }
 
-        public  static async Task<List<Details>> GetDetailsAsync()
+        public static async Task<List<Details>> GetDetailsAsync()
         {
             var config = Configuration.Default.WithDefaultLoader();
             var context = BrowsingContext.New(config);
