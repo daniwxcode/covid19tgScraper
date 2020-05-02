@@ -69,6 +69,8 @@ namespace covid19tg_scraper.Data
                     request.AddParameter("application/json", JsonConvert.SerializeObject(Details), ParameterType.RequestBody);
                     await client.ExecuteAsync(request);
                 }
+                 int i=0;
+                i=1+1;
 
 
 
