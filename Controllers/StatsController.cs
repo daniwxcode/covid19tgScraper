@@ -20,7 +20,7 @@ namespace covid19tg_scraper.Controllers
     public class StatsController : ControllerBase
     {
         private readonly ILogger<DetailsController> _logger;
-        // Constructor
+        // Constructor 
         public StatsController(ILogger<DetailsController> logger)
         {
             _logger = logger;
@@ -33,6 +33,7 @@ namespace covid19tg_scraper.Controllers
             {
                 InfosCovidProvider.Stats =new Stats( await InfosCovidProvider.GetStatAsync());               
             }
+            
             return InfosCovidProvider.Stats;
 
         }
